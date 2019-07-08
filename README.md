@@ -1,4 +1,4 @@
-# RTIKIDQUalisys
+# RTIKIDQualisys
 C++ code for computing in real-time IK and ID using OpenSIm and the Qualisys motion capture system.
 
 ## Dependencies
