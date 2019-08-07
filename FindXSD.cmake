@@ -14,8 +14,8 @@ FIND_PROGRAM( XSD_EXECUTABLE
 					/opt/xsd-3.2.0-i686-macosx/bin
 			  		/opt/xsd-3.2.0-x86_64-linux-gnu/bin
 			  		/usr/bin
-					"C:/Program Files (x86)/CodeSynthesis XSD 3.3/include"
-					"C:/Programmi/CodeSynthesis\ XSD\ 3.3/include"
+					"C:/Program Files\ (x86)/CodeSynthesis\ XSD\ 4.0/include"
+					"C:/Programmi/CodeSynthesis\ XSD\ 4.0/include"
 					ENV PATH )
 
 IF( XSD_EXECUTABLE )

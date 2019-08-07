@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-qt4_automoc(myGLWidget.h)
-QT4_WRAP_UI(UISrcs mainwindow.ui)
+#qt_automoc(myGLWidget.h)
+#QT_WRAP_UI(UISrcs mainwindow.ui)
 
 ADD_LIBRARY(opengl_util
 	myGLWidget.cpp

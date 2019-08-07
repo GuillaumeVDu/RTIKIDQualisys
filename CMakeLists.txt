@@ -5,18 +5,17 @@ PROJECT(IK_ID_RT)
 SET(BOOST_MIN_VERSION "1.48.0")
 
 SET(XSENS OFF)
-SET(EMG ON)
-
-#TODO install lib in CEINMS-RT
+SET(EMG OFF)
 
 #TODO
-#SET(USE_GUI ON)
-#SET(FORCEQT5 OFF)
+SET(USE_GUI ON)
+SET(FORCEQT5 ON)
 
-IF(EMG)
-	#Update this path to your configuration
-	SET(EMG_DIR ${CMAKE_SOURCE_DIR}/../OT/)
-ENDIF()
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+set (CMAKE_PREFIX_PATH "C:/Qt/Qt5.10.0/5.10.0/msvc2013_64/")
 
 IF(XSENS)
 	#Update this path to your configuration
@@ -32,7 +31,7 @@ ELSE()
 ENDIF()
 
 IF(NOT ENV{OPENSIM_HOME} AND UNIX)
-	SET(OPENSIM_INSTALL_DIR /usr/local)
+	SET(OPENSIM_INSTALL_DIR C:/Users/vicon/Documents/OpenSim/OpenSim_install)
 ENDIF()
 
 add_definitions(-DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
@@ -63,7 +62,6 @@ INCLUDE_DIRECTORIES(
   	${CMAKE_SOURCE_DIR}/src/executable/
   	${CMAKE_SOURCE_DIR}/src/plugin
   	${CMAKE_SOURCE_DIR}/src/QualisysSocket
-#   /usr/local/sdk/inlude
   	${CMAKE_SOURCE_DIR}/gui
   	${CMAKE_SOURCE_DIR}/gui/opengl
   	${CMAKE_SOURCE_DIR}/build/include
@@ -96,16 +94,19 @@ LINK_DIRECTORIES(
 	${CMAKE_SOURCE_DIR}/lib
 )
 
+IF(NOT FORCEQT5)
+	FIND_PACKAGE(Qt4 REQUIRED QtCore QtGui QtOpenGL)
+ELSE()
+	FIND_PACKAGE(Qt5 REQUIRED Core Gui OpenGL)
+ENDIF()
 
-FIND_PACKAGE(Qt4 REQUIRED QtCore QtGui QtOpenGL)
-
-INCLUDE(${QT_USE_FILE})
+#INCLUDE(${QT_USE_FILE})
 
 FIND_PACKAGE(OpenGL REQUIRED)
 
 FIND_PACKAGE(Threads)
 
-FIND_PACKAGE(Boost ${BOOST_MIN_VERSION} COMPONENTS timer filesystem program_options thread system REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS timer filesystem program_options thread system REQUIRED)
 LINK_DIRECTORIES( ${Boost_LIBRARY_DIRS} )
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 
