@@ -1,30 +1,78 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
+#define GL_GLEXT_PROTOTYPES
+
+
+#include <Simbody.h>
+#include <OpenSim/OpenSim.h>
+#include <SimTKCommon.h>
+
+
+#ifdef UNIX
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+#include <GL/glut.h>
+#endif
+#ifdef APPLE
+#include <gl.h>
+#include <glu.h>
+#include <glext.h>
+#include <Glut/glut.h>
+#endif
+#ifdef WIN32
+#include <windows.h>
+#include <GL/glew.h>
+//#include <GL/gl.h>
+#include <GL/glu.h>
+//#include <glext.h>
+#include <GL/glut.h>
+#endif
+
+/*/ /!\ Warning do not put 
+#include <Simbody.h>
+#include <OpenSim/OpenSim.h>
+
+after 
+#include <QtOpenGL/QtOpenGL>
+#include <QtOpenGL/QGLWidget> or other opensim simtk library
+
+#include <windows.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+#include <GL/glut.h>
+
+will not compile because of redinition but work fine on Linux (go figure !)
+
+*/
+
+#include "Mesh.h"
+#include "RenderedMesh.h"
+
 
 #include <QtOpenGL/QtOpenGL>
 #include <QtOpenGL/QGLWidget>
-//#include "qtlogo.h"
-#include <OpenSim/OpenSim.h>
-#include <Simbody.h>
+
+
+#if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
+#undef qInfo
+#endif
+
+
 #include <cstring>
 #include <utility>
-#include "Mesh.h"
-#include "RenderedMesh.h"
-#include <DrawingUtility.h>
 #include <boost/thread.hpp>
 #include <cmath>
-#include <QtGui>
-#include <QtOpenGL/QGLFormat>
-#include <GL/glu.h>
-#include <GL/freeglut.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-//@TODO Add GRF arrow
+using namespace SimTK;
+using namespace std;
 
-namespace gl
+namespace glRT
 {
 class GLWidget : public QGLWidget
 {

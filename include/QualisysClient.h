@@ -183,7 +183,7 @@ class QualisysClient
 		/**
 		 * Get the frame Number
 		 */
-		inline const uint& getFrameNumber()
+		inline const unsigned int& getFrameNumber()
 		{
 			return frameNumber_;
 		}
@@ -240,7 +240,7 @@ class QualisysClient
 		CRTPacket* pRTPacket_; //!< Packet containing the data
 		CRTPacket::EPacketType eType_; //!< Type of packet
 		CRTProtocol poRTProtocol_; //!< Class for the communication with the Qualisys software.
-		uint frameNumber_; //!< Number of frames
+		unsigned int frameNumber_; //!< Number of frames
 		int markerCount_; //!< Number of marker received
 		int forcePlateCount_; //!< Number of forces plates received
 		int forceCount_; //!< Number of forces received

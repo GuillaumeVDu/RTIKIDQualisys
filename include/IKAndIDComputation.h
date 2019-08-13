@@ -23,8 +23,12 @@
 #ifndef IKANDIDCOMPUTATION_H
 #define IKANDIDCOMPUTATION_H
 
+
+#include <OpenSim/OpenSim.h>
+
 #include "CommonCEINMS.h"
 #include "OpenSimFileLogger.h"
+#include <getTime.h>
 
 #define timer   timer_class
 #include <boost/timer.hpp>
@@ -36,7 +40,6 @@
 #include "InvKinInvDynRealTime.h"
 #include <boost/thread/mutex.hpp>
 #include "KalmanFilterSimTK.h"
-#include <OpenSim/OpenSim.h>
 #include <boost/thread.hpp>
 #include "QualisysClient.h"
 #include "XMLInterpreterV2.h"

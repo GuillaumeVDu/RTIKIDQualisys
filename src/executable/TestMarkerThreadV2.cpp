@@ -31,13 +31,10 @@ void SigintHandler ( int sig )
 	SyncToolsIK::Shared::endThreadMutex.unlock();
 }
 
-void thread ( std::string executionIKFileName );
+void threadFunc(std::string executionIKFileName);
 
-int main ( int argc, char** argv )
-{
+int main(int argc, char* argv[]) {
 	std::cout << "\033[1;31mMain: " << "\033[0m" << std::endl;
-//	try
-//	{
 	SyncToolsIK::Shared::endThreadMutex.lock();
 	SyncToolsIK::Shared::endThread = false;
 	SyncToolsIK::Shared::endThreadMutex.unlock();
@@ -55,7 +52,7 @@ int main ( int argc, char** argv )
 	string executionIKFileName = cliOption.getxmlIKFilePath();
 	_record = cliOption.getRecord();
 	_outDirectory = cliOption.getRecordFilePath();
-// 	_printTime = cliOption.getPrintTime();
+
 
 	SyncToolsIK::Shared::positionMutex.lock();
 	SyncToolsIK::Shared::newPositionData = false;
@@ -76,11 +73,11 @@ int main ( int argc, char** argv )
 		dofNames.push_back ( coordSet.get ( i ).getName() );
 
 	MainWindow gui ( 0, dofNames, xmlInterpreter->getOsimFile() );
-//
+
 	delete model;
 	xmlInterpreter.reset();
 
-	boost::thread workerThread ( thread, executionIKFileName );
+	boost::thread workerThread(threadFunc, executionIKFileName);
 
 	gui.show();
 
@@ -97,7 +94,7 @@ int main ( int argc, char** argv )
 	return 0;
 }
 
-void thread ( std::string executionIKFileName )
+void threadFunc(std::string executionIKFileName)
 {
 	std::cout << "\033[1;31mthread: " << "\033[0m" << std::endl;
 	IKAndIDComputation comp ( executionIKFileName );
@@ -148,4 +145,5 @@ void thread ( std::string executionIKFileName )
 	comp.stop();
 	
 	std::cout << "\033[1;31mquit\033[0m" << std::endl;
+
 }

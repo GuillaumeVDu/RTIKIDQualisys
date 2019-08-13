@@ -7,7 +7,7 @@
 
 #include "mainwindow2Model.h"
 
-using namespace gl;
+using namespace glRT;
 
 MainWindow::MainWindow ( double dt, std::vector<std::string> dofNames, const std::string modelFileName,
 		QWidget* parent ) :

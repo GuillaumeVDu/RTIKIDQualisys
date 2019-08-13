@@ -194,9 +194,7 @@ void IKAndIDComputation::provider()
 
 	_barrier->wait();
 
-	timeval now;
-	gettimeofday ( &now, NULL );
-	double timePast = ( now.tv_sec ) + 0.000001 * now.tv_usec;
+	double timePast = getTime();
 
 	while ( true )
 	{
@@ -221,9 +219,7 @@ void IKAndIDComputation::provider()
 			SimTK::Array_<SimTK::fVec3> markerData = client.getDataUnfiltered();
 			SimTK::Array_<SimTK::fVec9> grfData = client.getDataForcePlateUnfiltered();
 
-			timeval now;
-			gettimeofday ( &now, NULL );
-			double timeNow = ( now.tv_sec ) + 0.000001 * now.tv_usec;
+			double timeNow = getTime();
 
 			if(_record)
 			{
@@ -690,9 +686,7 @@ void IKAndIDComputation::supervisor()
 
 						if(_record)
 						{
-							timeval timeNow;
-							gettimeofday ( &timeNow, NULL );
-							double timeDoubleNow = ( timeNow.tv_sec ) + 0.000001 * timeNow.tv_usec;
+							double timeDoubleNow = getTime();
 							boost::mutex::scoped_lock lock(_loggerMutex);
 							_logger->log(Logger::IK, timeStamp, _ikResultWorker[cpt]);
 							_logger->log(Logger::IKTiming, timeStamp, timeDoubleNow - timeStamp);

@@ -251,7 +251,7 @@ public:
 	
 	inline const std::vector<string>& getMarkersNames() const
 	{
-		xmlInterpreter_->getMarkersNames();
+		return xmlInterpreter_->getMarkersNames();
 	}
 
 protected:

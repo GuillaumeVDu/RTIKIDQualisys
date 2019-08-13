@@ -29,7 +29,7 @@ void SigintHandler ( int sig )
 	SyncToolsIK::Shared::endThreadMutex.unlock();
 }
 
-void thread ( std::string executionIKFileName );
+void threadFunc ( std::string executionIKFileName );
 
 int main ( int argc, char** argv )
 {
@@ -79,7 +79,7 @@ int main ( int argc, char** argv )
 	delete model;
 	xmlInterpreter.reset();
 
-	boost::thread workerThread ( thread, executionIKFileName );
+	boost::thread workerThread(threadFunc, executionIKFileName);
 
 	gui.show();
 
@@ -94,7 +94,7 @@ int main ( int argc, char** argv )
 	return 0;
 }
 
-void thread ( std::string executionIKFileName )
+void threadFunc(std::string executionIKFileName)
 {
 	std::cout << "\033[1;31mthread: " << "\033[0m" << std::endl;
 	IKAndIDComputation comp ( executionIKFileName );

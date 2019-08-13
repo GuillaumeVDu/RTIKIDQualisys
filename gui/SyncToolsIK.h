@@ -19,7 +19,7 @@
 #include <boost/thread/barrier.hpp>
 #include <boost/thread/condition_variable.hpp>
 
-#include "Semaphore.h"
+#include "SemaphoreRT.h"
 
 #include <string>
 using std::string;

@@ -8,13 +8,52 @@
 #ifndef MESH_H_
 #define MESH_H_
 
-#include "SimTKcommon.h"
 
-#define GL_GLEXT_PROTOTYPES
+
+
+#include "SimTKcommon.h"
+/*/ /!\ Warning do not put
+//#include "SimTKcommon.h" or other opensim simtk library
+
+after
+#include <QtOpenGL/QtOpenGL>
+#include <QtOpenGL/QGLWidget>
+
+#include <windows.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
 #include <GL/glut.h>
+
+will not compile because of redinition but work fine on Linux (go figure !)
+
+*/
+#include <DrawingUtility.h>
+
+#define GL_GLEXT_PROTOTYPES
+#ifdef WIN32
+#include <windows.h>
+#include <GL/glew.h>
+//#include <GL/gl.h>
+#include <GL/glu.h>
+//#include <GL/glext.h>
+#include <GL/glut.h>
+#endif
+
+
+
+#ifdef UNIX
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+#include <GL/glut.h>
+#endif
+#ifdef APPLE
+#include <gl.h>
+#include <glu.h>
+#include <glext.h>
+#include <Glut/glut.h>
+#endif
 
 #include <cstdlib>
 #include <string>
@@ -26,11 +65,14 @@
 #include <cstdio>
 #include <cerrno>
 #include <cstring>
-#include <sys/stat.h>
 
-#include <DrawingUtility.h>
-
+using namespace SimTK;
 using namespace std;
+
+// Windows special function because windows is the special "kid"
+#ifdef WIN32
+
+#endif
 
 class Mesh {
 public:

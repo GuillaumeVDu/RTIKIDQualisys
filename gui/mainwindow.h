@@ -39,7 +39,7 @@
 #undef timer
 #include <boost/timer/timer.hpp>
 
-using namespace gl;
+using namespace glRT;
 namespace Ui
 {
 	class MainWindow;

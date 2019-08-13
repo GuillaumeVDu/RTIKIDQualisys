@@ -17,8 +17,8 @@ Mesh::Mesh(vector<float>& vertices, vector<float>& normals, vector<GLushort>& fa
         glGenBuffers(2, buffers);
         vertBuffer = buffers[0];
         normBuffer = buffers[1];
-        glBindBuffer(GL_ARRAY_BUFFER, vertBuffer);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(float), &vertices[0], GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, vertBuffer);
+		glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(float), &vertices[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, normBuffer);
         glBufferData(GL_ARRAY_BUFFER, normals.size()*sizeof(float), &normals[0], GL_STATIC_DRAW);
 
@@ -48,9 +48,9 @@ Mesh::~Mesh() {
 }
 
 void Mesh::draw(short representation) const {
-    glBindBuffer(GL_ARRAY_BUFFER, vertBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertBuffer);
     glVertexPointer(3, GL_FLOAT, 0, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, normBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, normBuffer);
     glNormalPointer(GL_FLOAT, 0, 0);
     if (representation == DecorativeGeometry::DrawSurface)
         glDrawElements(GL_TRIANGLES, (GLsizei)faces.size(), GL_UNSIGNED_SHORT, &faces[0]);
@@ -64,3 +64,4 @@ void Mesh::getBoundingSphere(float& radius, fVec3& center) {
     radius = this->radius;
     center = this->center;
 }
+

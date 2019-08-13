@@ -1,13 +1,33 @@
 #ifndef DRAWINGUTILITY_H_
 #define DRAWINGUTILITY_H_
 
+
 #include "SimTKcommon.h"
 
+#ifdef WIN32
+#include <windows.h>
+#include <GL/glew.h>
+//#include <GL/gl.h>
+#include <GL/glu.h>
+//#include <GL/glext.h>
+#include <GL/glut.h>
+#endif
+
 #define GL_GLEXT_PROTOTYPES
+
+#ifdef UNIX
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
 #include <GL/glut.h>
+#endif
+#ifdef APPLE
+#include <gl.h>
+#include <glu.h>
+#include <glext.h>
+#include <Glut/glut.h>
+#endif
+
 
 #include <cstdlib>
 #include <string>
@@ -19,7 +39,6 @@
 #include <cstdio>
 #include <cerrno>
 #include <cstring>
-#include <sys/stat.h>
 
 using namespace SimTK;
 using namespace std;
@@ -38,17 +57,17 @@ static void computeBoundingSphereForVertices(const vector<float>& vertices,
 		}
 	}
 	center = (lower + upper) / 2;
-	float rad2 = 0;
+	float radians2 = 0;
 	for (int i = 0; i < (int) vertices.size(); i += 3)
 	{
 		float x = center[0] - vertices[i];
 		float y = center[1] - vertices[i + 1];
 		float z = center[2] - vertices[i + 2];
 		float norm2 = x * x + y * y + z * z;
-		if (norm2 > rad2)
-			rad2 = norm2;
+		if (norm2 > radians2)
+			radians2 = norm2;
 	}
-	radius = sqrt(rad2);
+	radius = sqrt(radians2);
 }
 
 

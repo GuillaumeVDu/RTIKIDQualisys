@@ -73,7 +73,7 @@ bool QualisysClient::receiveData()
 	frameNumber_ = pRTPacket_->GetFrameNumber();
 
 	// Get the markers data
-	poRTProtocol_.GetCurrentFrame ( CRTProtocol::Component3d );
+	poRTProtocol_.GetCurrentFrame ( CRTProtocol::cComponent3d );
 
 	SimTK::fVec3 marker;
 	SimTK::fVec3 force;
@@ -147,7 +147,7 @@ bool QualisysClient::receiveData()
 	if ( _motionCapturePreProcessing->getNbOfPlate() > 0 )
 	{
 		// Get the data for the force plate
-		poRTProtocol_.GetCurrentFrame ( CRTProtocol::ComponentForce );
+		poRTProtocol_.GetCurrentFrame ( CRTProtocol::cComponentForce );
 
 		// Test if we receive force plate data
 		if ( poRTProtocol_.ReceiveRTPacket ( eType_, true ) != NULL )

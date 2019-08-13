@@ -1,7 +1,10 @@
 //#pragma warning( push )
 //#pragma warning ( disable : ALL_CODE_ANALYSIS_WARNINGS )
+
+
 #include "RTProtocol.h"
 #pragma warning( pop )
+
 
 #include <iostream>
 #include <fstream>
@@ -17,6 +20,7 @@
 
 using namespace std;
 
+#define M_PI 3.14159265
 
 // Start the main program
 int main(int argc, char* argv[]) {
@@ -29,11 +33,11 @@ int main(int argc, char* argv[]) {
 
     // Defining global variables
     float x, y, z, roll, pitch, yaw;
-    uint markerCount;
+    unsigned int markerCount;
     int markerIndex;
     int forceCount;
     float markerX, markerY, markerZ;
-    uint frameNumber;
+	unsigned int frameNumber;
 
     CRTPacket*             pRTPacket;
     CRTPacket::EPacketType eType;
@@ -63,7 +67,7 @@ int main(int argc, char* argv[]) {
         pRTPacket = poRTProtocol.GetRTPacket();
         frameNumber  = pRTPacket->GetFrameNumber();
 
-        poRTProtocol.GetCurrentFrame(CRTProtocol::ComponentForce);
+        poRTProtocol.GetCurrentFrame(CRTProtocol::cComponentForce);
 
         if (poRTProtocol.ReceiveRTPacket(eType, true)) {
             switch (eType) {
@@ -115,7 +119,7 @@ int main(int argc, char* argv[]) {
 
         }
 
-        poRTProtocol.GetCurrentFrame(CRTProtocol::Component3d);
+        poRTProtocol.GetCurrentFrame(CRTProtocol::cComponent3d);
 
 		if (poRTProtocol.ReceiveRTPacket(eType, true)) {
 			switch (eType) {

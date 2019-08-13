@@ -7,6 +7,7 @@
 
 #include "RenderedMesh.h"
 
+
 RenderedMesh::RenderedMesh(const Transform& transform, const Vec3& scale,
 		const Vec4& color, short representation, unsigned short meshIndex,
 		unsigned short resolution) :
@@ -48,3 +49,4 @@ void RenderedMesh::computeBoundingSphere(float& radius, fVec3& center)
 	center += transform.p();
 	radius *= max(abs(scale[0]), max(abs(scale[1]), abs(scale[2])));
 }
+

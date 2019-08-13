@@ -53,7 +53,7 @@ public:
 	 */
 	IKSolverRT& operator=(IKSolverRT& ikSolverRT)
 	{
-		swap(*this, ikSolverRT);
+		std::swap(*this, ikSolverRT);
 		return *this;
 	}
 

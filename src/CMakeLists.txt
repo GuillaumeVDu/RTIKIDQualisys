@@ -1,10 +1,15 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 ADD_LIBRARY(QualisysTCPIP
-	QualisysSocket/NBC_Markup.cpp
+	QualisysSocket/Markup.cpp
 	QualisysSocket/Network.cpp
 	QualisysSocket/RTPacket.cpp
 	QualisysSocket/RTProtocol.cpp
+)
+
+TARGET_LINK_LIBRARIES(QualisysTCPIP
+	${WINLIB}
+	${WINMM}
 )
 
 ADD_LIBRARY(InvIkId
@@ -13,18 +18,19 @@ ADD_LIBRARY(InvIkId
 	IKSolverRT.cpp
 	InvKinMarker.cpp
 	InvDyn.cpp
-	${CEINMS_XML_HEADERS}/executionIK_ID_V2.cxx
+	executionIK_ID_V2.cxx
 	XMLInterpreterV2.cpp
 	RTIKIDInterface.cpp
 	KalmanFilterSimTK.cpp
 	MotionCapturePreprocessing.cpp
-	${CEINMS_XML_HEADERS}/Laboratory.cxx
+	Laboratory.cxx
 	QualisysClient.cpp
 )
 
+
 TARGET_LINK_LIBRARIES(InvIkId
 	QualisysTCPIP
-	${Boost_LIBRARY}
+	SharedThread
 	debug osimTools${CMAKE_DEBUG_POSTFIX} optimized osimTools
     debug osimCommon${CMAKE_DEBUG_POSTFIX} optimized osimCommon
     debug osimSimulation${CMAKE_DEBUG_POSTFIX} optimized osimSimulation
@@ -34,55 +40,27 @@ TARGET_LINK_LIBRARIES(InvIkId
 	debug SimTKmath${CMAKE_DEBUG_POSTFIX} optimized SimTKmath
 	debug SimTKsimbody${CMAKE_DEBUG_POSTFIX} optimized SimTKsimbody
 	${XERCES_LIBRARY}
-	${Boost_THREAD_LIBRARY}
-	${Boost_TIMER_LIBRARY}
-	${Boost_SYSTEM_LIBRARY}
+	${WINLIB}
+	${WINMM}
 )
 
-# ADD_LIBRARY(InvIkIdThread
-# 	IKSolverRT.cpp
-# 	InvDynThread.cpp
-# 	${CEINMS_XML_HEADERS}/executionIK_ID.cxx
-# 	XMLInterpreterV2.cpp
-# 	IKAndIDComputation.cpp
-# 	KalmanFilterSimTK.cpp
-# 	MotionCapturePreprocessing.cpp
-# 	${CEINMS_XML_HEADERS}/Laboratory.cxx
-# 	QualisysClient.cpp
-# )
-# 
-# TARGET_LINK_LIBRARIES(InvIkIdThread
-# 	QualisysTCPIP
-# 	${Boost_LIBRARY}
-# 	debug osimTools${CMAKE_DEBUG_POSTFIX} optimized osimTools
-#     debug osimCommon${CMAKE_DEBUG_POSTFIX} optimized osimCommon
-#     debug osimSimulation${CMAKE_DEBUG_POSTFIX} optimized osimSimulation
-#     debug SimTKcommon${CMAKE_DEBUG_POSTFIX} optimized SimTKcommon
-#     debug osimActuators${CMAKE_DEBUG_POSTFIX} optimized osimActuators
-# 	debug osimAnalyses${CMAKE_DEBUG_POSTFIX} optimized osimAnalyses
-# 	debug SimTKmath${CMAKE_DEBUG_POSTFIX} optimized SimTKmath
-# 	debug SimTKsimbody${CMAKE_DEBUG_POSTFIX} optimized SimTKsimbody
-# 	${XERCES_LIBRARY}
-# 	${Boost_THREAD_LIBRARY}
-# 	${Boost_TIMER_LIBRARY}
-# 	${Boost_SYSTEM_LIBRARY}
-# )
 
 ADD_LIBRARY(InvIkIdThreadV2
 	IKSolverRT.cpp
 	InvDynThread.cpp
-	${CEINMS_XML_HEADERS}/executionIK_ID_V2.cxx
+	executionIK_ID_V2.cxx
 	XMLInterpreterV2.cpp
 	IKAndIDComputationV2.cpp
 	KalmanFilterSimTK.cpp
 	MotionCapturePreprocessing.cpp
-	${CEINMS_XML_HEADERS}/Laboratory.cxx
+	Laboratory.cxx
 	QualisysClient.cpp
 )
 
 TARGET_LINK_LIBRARIES(InvIkIdThreadV2
 	QualisysTCPIP
-	${Boost_LIBRARY}
+	FileIO
+	SharedThread
 	debug osimTools${CMAKE_DEBUG_POSTFIX} optimized osimTools
     debug osimCommon${CMAKE_DEBUG_POSTFIX} optimized osimCommon
     debug osimSimulation${CMAKE_DEBUG_POSTFIX} optimized osimSimulation
@@ -92,44 +70,8 @@ TARGET_LINK_LIBRARIES(InvIkIdThreadV2
 	debug SimTKmath${CMAKE_DEBUG_POSTFIX} optimized SimTKmath
 	debug SimTKsimbody${CMAKE_DEBUG_POSTFIX} optimized SimTKsimbody
 	${XERCES_LIBRARY}
-	${Boost_THREAD_LIBRARY}
-	${Boost_TIMER_LIBRARY}
-	${Boost_SYSTEM_LIBRARY}
-	FileIO
-)
-
-# ADD_LIBRARY(OsimIKPlugin SHARED
-# 	plugin/OsimIKPlugin.cpp
-# 	${CEINMS_PLUGIN_HEADERS}/TranslateOpenSimCEINMS.cpp
-# 	${CEINMS_XML_HEADERS}/execution.cxx
-# )
-# 
-# TARGET_LINK_LIBRARIES(OsimIKPlugin
-# 	InvIkId
-# )
-
-# ADD_LIBRARY(OsimIKPluginSaveFile SHARED
-# 	plugin/OsimIKPluginSaveFile.cpp
-# 	${CEINMS_PLUGIN_HEADERS}/TranslateOpenSimCEINMS.cpp
-# 	${CEINMS_XML_HEADERS}/execution.cxx
-# )
-# 
-# TARGET_LINK_LIBRARIES(OsimIKPluginSaveFile
-# 	InvIkId
-# 	${Boost_FILESYSTEM_LIBRARY}
-# )
-
-ADD_LIBRARY(OsimIKPluginSaveFileMultiThread SHARED
-	plugin/OsimIKPluginSaveFileMultiThread.cpp
-	${CEINMS_PLUGIN_HEADERS}/TranslateOpenSimCEINMS.cpp
-	${CEINMS_XML_HEADERS}/execution.cxx
-)
-
-TARGET_LINK_LIBRARIES(OsimIKPluginSaveFileMultiThread
-	InvIkIdThreadV2
-	shared
-	${Boost_FILESYSTEM_LIBRARY}
-	FileIO
+	${WINLIB}
+	${WINMM}
 )
 
 ADD_EXECUTABLE(QualisysTest
@@ -140,38 +82,15 @@ TARGET_LINK_LIBRARIES(QualisysTest
 	QualisysTCPIP
 )
 
-IF(XSENS)
-	ADD_EXECUTABLE(TestIMU 
-		executable/TestIMU.cpp
-	)
-	
-	TARGET_LINK_LIBRARIES(TestIMU
-		InvIkId
-		xsens_driver
-		ncurses
-		xsens
-		${CMAKE_THREAD_LIBS_INIT}
-		${Boost_LIBRARY}
-		debug osimTools${CMAKE_DEBUG_POSTFIX} optimized osimTools
-		debug osimCommon${CMAKE_DEBUG_POSTFIX} optimized osimCommon
-		debug osimSimulation${CMAKE_DEBUG_POSTFIX} optimized osimSimulation
-		debug SimTKcommon${CMAKE_DEBUG_POSTFIX} optimized SimTKcommon
-		debug osimActuators${CMAKE_DEBUG_POSTFIX} optimized osimActuators
-		debug osimAnalyses${CMAKE_DEBUG_POSTFIX} optimized osimAnalyses
-		debug SimTKmath${CMAKE_DEBUG_POSTFIX} optimized SimTKmath
-		debug SimTKsimbody${CMAKE_DEBUG_POSTFIX} optimized SimTKsimbody
-		${XERCES_LIBRARY}
-	)
-ENDIF()
 
-ADD_EXECUTABLE(TestDoubleModel
+ADD_EXECUTABLE(TestProgDoubleModel
 	executable/TestDoubleModel.cpp
 )
 
-TARGET_LINK_LIBRARIES(TestDoubleModel
+TARGET_LINK_LIBRARIES(TestProgDoubleModel
 	InvIkIdThreadV2
 	Gui2Model
-	shared
+	SharedThread
 	opengl_util
 	debug osimTools${CMAKE_DEBUG_POSTFIX} optimized osimTools
     debug osimCommon${CMAKE_DEBUG_POSTFIX} optimized osimCommon
@@ -181,24 +100,23 @@ TARGET_LINK_LIBRARIES(TestDoubleModel
 	debug osimAnalyses${CMAKE_DEBUG_POSTFIX} optimized osimAnalyses
 	debug SimTKmath${CMAKE_DEBUG_POSTFIX} optimized SimTKmath
 	debug SimTKsimbody${CMAKE_DEBUG_POSTFIX} optimized SimTKsimbody
-	${Boost_LIBRARY}
 	${XERCES_LIBRARY}
-	${Boost_SYSTEM_LIBRARY}
-	${Boost_FILESYSTEM_LIBRARY}
 	${QT_LIBRARIES}
 	${OPENGL_gl_LIBRARY}
 	${OPENGL_glu_LIBRARY}
+	${WINLIB}
+	${WINMM}
 )
 
-ADD_EXECUTABLE(TestMarkerRTCaptureOfflineProcc
-	executable/TestMarkerRTCaptureOfflineProcc.cpp
+ADD_EXECUTABLE(TestProgMarkerRTCaptureOfflineProcc executable/TestMarkerRTCaptureOfflineProcc.cpp
 	CLIOption.cpp
 )
 
-TARGET_LINK_LIBRARIES(TestMarkerRTCaptureOfflineProcc
+TARGET_LINK_LIBRARIES(TestProgMarkerRTCaptureOfflineProcc
 	InvIkId
 	Gui
-	shared
+	SharedThread
+	FileIO
 	opengl_util
 	debug osimTools${CMAKE_DEBUG_POSTFIX} optimized osimTools
     debug osimCommon${CMAKE_DEBUG_POSTFIX} optimized osimCommon
@@ -208,114 +126,23 @@ TARGET_LINK_LIBRARIES(TestMarkerRTCaptureOfflineProcc
 	debug osimAnalyses${CMAKE_DEBUG_POSTFIX} optimized osimAnalyses
 	debug SimTKmath${CMAKE_DEBUG_POSTFIX} optimized SimTKmath
 	debug SimTKsimbody${CMAKE_DEBUG_POSTFIX} optimized SimTKsimbody
-	${Boost_THREAD_LIBRARY}
-	${Boost_TIMER_LIBRARY}
-	${Boost_SYSTEM_LIBRARY}
-	${Boost_PROGRAM_OPTIONS_LIBRARY}
-	${Boost_FILESYSTEM_LIBRARY}
 	${XERCES_LIBRARY}
 	${QT_LIBRARIES}
 	${OPENGL_gl_LIBRARY}
 	${OPENGL_glu_LIBRARY}
-	FileIO
+	${WINLIB}
+	${WINMM}
 )
 
-IF(EMG)
-ADD_EXECUTABLE(TestMarkerEMGRTCaptureOfflineProcc
-	executable/TestMarkerEMGRTCaptureOfflineProcc.cpp
+
+ADD_EXECUTABLE(TestProgMarkerThreadV2 executable/TestMarkerThreadV2.cpp
 	CLIOption.cpp
 )
 
-TARGET_LINK_LIBRARIES(TestMarkerEMGRTCaptureOfflineProcc
-	InvIkId
-	Gui
-	shared
-		OTSocket
-		EMGCEINMSTool
-	opengl_util
-	debug osimTools${CMAKE_DEBUG_POSTFIX} optimized osimTools
-    debug osimCommon${CMAKE_DEBUG_POSTFIX} optimized osimCommon
-    debug osimSimulation${CMAKE_DEBUG_POSTFIX} optimized osimSimulation
-    debug SimTKcommon${CMAKE_DEBUG_POSTFIX} optimized SimTKcommon
-    debug osimActuators${CMAKE_DEBUG_POSTFIX} optimized osimActuators
-	debug osimAnalyses${CMAKE_DEBUG_POSTFIX} optimized osimAnalyses
-	debug SimTKmath${CMAKE_DEBUG_POSTFIX} optimized SimTKmath
-	debug SimTKsimbody${CMAKE_DEBUG_POSTFIX} optimized SimTKsimbody
-	${Boost_THREAD_LIBRARY}
-	${Boost_TIMER_LIBRARY}
-	${Boost_SYSTEM_LIBRARY}
-	${Boost_PROGRAM_OPTIONS_LIBRARY}
-	${Boost_FILESYSTEM_LIBRARY}
-	${XERCES_LIBRARY}
-	${QT_LIBRARIES}
-	${OPENGL_gl_LIBRARY}
-	${OPENGL_glu_LIBRARY}
-	FileIO
-)
-ENDIF()
-
-ADD_EXECUTABLE(TestMarkerThreadV2
-	executable/TestMarkerThreadV2.cpp
-	CLIOption.cpp
-)
-
-TARGET_LINK_LIBRARIES(TestMarkerThreadV2
+TARGET_LINK_LIBRARIES(TestProgMarkerThreadV2
+	SharedThread
 	InvIkIdThreadV2
-	InvIkId
 	Gui
-	shared
-	opengl_util
-	debug osimTools${CMAKE_DEBUG_POSTFIX} optimized osimTools
-    debug osimCommon${CMAKE_DEBUG_POSTFIX} optimized osimCommon
-    debug osimSimulation${CMAKE_DEBUG_POSTFIX} optimized osimSimulation
-    debug SimTKcommon${CMAKE_DEBUG_POSTFIX} optimized SimTKcommon
-    debug osimActuators${CMAKE_DEBUG_POSTFIX} optimized osimActuators
-	debug osimAnalyses${CMAKE_DEBUG_POSTFIX} optimized osimAnalyses
-	debug SimTKmath${CMAKE_DEBUG_POSTFIX} optimized SimTKmath
-	debug SimTKsimbody${CMAKE_DEBUG_POSTFIX} optimized SimTKsimbody
-	${Boost_LIBRARY}
-	${Boost_THREAD_LIBRARY}
-	${Boost_TIMER_LIBRARY}
-	${Boost_SYSTEM_LIBRARY}
-	${Boost_PROGRAM_OPTIONS_LIBRARY}
-	${Boost_FILESYSTEM_LIBRARY}
-	${XERCES_LIBRARY}
-	${QT_LIBRARIES}
-	${OPENGL_gl_LIBRARY}
-	${OPENGL_glu_LIBRARY}
 	FileIO
+	opengl_util
 )
-
-IF(EMG)
-	ADD_EXECUTABLE(MarkerEMG
-		executable/MarkerEmg.cpp
-		CLIOption.cpp
-	)
-
-	TARGET_LINK_LIBRARIES(MarkerEMG
-		InvIkId
-		GuiEmg
-		shared
-		opengl_util
-		OTSocket
-		EMGCEINMSTool
-		debug osimTools${CMAKE_DEBUG_POSTFIX} optimized osimTools
-		debug osimCommon${CMAKE_DEBUG_POSTFIX} optimized osimCommon
-		debug osimSimulation${CMAKE_DEBUG_POSTFIX} optimized osimSimulation
-		debug SimTKcommon${CMAKE_DEBUG_POSTFIX} optimized SimTKcommon
-		debug osimActuators${CMAKE_DEBUG_POSTFIX} optimized osimActuators
-		debug osimAnalyses${CMAKE_DEBUG_POSTFIX} optimized osimAnalyses
-		debug SimTKmath${CMAKE_DEBUG_POSTFIX} optimized SimTKmath
-		debug SimTKsimbody${CMAKE_DEBUG_POSTFIX} optimized SimTKsimbody
-		${Boost_THREAD_LIBRARY}
-		${Boost_TIMER_LIBRARY}
-		${Boost_SYSTEM_LIBRARY}
-		${Boost_PROGRAM_OPTIONS_LIBRARY}
-		${Boost_FILESYSTEM_LIBRARY}
-		${XERCES_LIBRARY}
-		${QT_LIBRARIES}
-		${OPENGL_gl_LIBRARY}
-		${OPENGL_glu_LIBRARY}
-		FileIO
-	)
-ENDIF()

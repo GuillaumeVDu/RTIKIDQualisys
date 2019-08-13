@@ -26,6 +26,7 @@
 #include "CLIOption.h"
 #include "CommonCEINMS.h"
 #include "OpenSimFileLogger.h"
+#include <getTime.h>
 
 std::string executionIKFileName;
 RTIKIDInterface* interface;
@@ -94,7 +95,7 @@ void SigintHandler ( int sig )
 	SyncToolsIK::Shared::endThreadMutex.unlock();
 }
 
-void thread();
+void threadFunc();
 void provider();
 
 int main ( int argc, char** argv )
@@ -143,7 +144,7 @@ int main ( int argc, char** argv )
 	gui.show();
 
 	boost::thread providerThread ( provider );
-	boost::thread workerThread ( thread );
+	boost::thread workerThread(threadFunc);
 
 	qtApp.exec();
 
@@ -199,9 +200,8 @@ void provider()
 		_logger->addLog ( Logger::MarkerFilter, _xmlInterpreter->getMarkersNames() );
 	}
 
-	timeval now;
-	gettimeofday ( &now, NULL );
-	double timePast = ( now.tv_sec ) + 0.000001 * now.tv_usec;
+
+	double timePast = getTime();
 
 	bool _firstPass = true;
 
@@ -229,9 +229,7 @@ void provider()
 			markerData = client->getDataUnfiltered();
 			grfData = client->getDataForcePlateUnfilteredVect();
 
-			timeval now;
-			gettimeofday ( &now, NULL );
-			timeNow = ( now.tv_sec ) + 0.000001 * now.tv_usec;
+			timeNow = getTime();
 
 			if ( _firstPass )
 			{
@@ -370,13 +368,10 @@ void provider()
 }
 
 
-void thread()
+void threadFunc()
 {
 	double fixedTimeComputation = interface->getDt();
-	timeval tv;
-	timeval now;
-	gettimeofday ( &tv, NULL );
-	double time = ( tv.tv_sec ) + 0.000001 * tv.tv_usec;
+	double time = getTime();
 	double timeNow;
 	double timeConsume;
 	double timeSub;
@@ -496,9 +491,7 @@ void thread()
 
 					if ( _record )
 					{
-						timeval timeNow;
-						gettimeofday ( &timeNow, NULL );
-						double timeDoubleNow = ( timeNow.tv_sec ) + 0.000001 * timeNow.tv_usec;
+						double timeDoubleNow = getTime();
 						_logger->log ( Logger::IK, timeStamp.front(), position );
 						_logger->log ( Logger::IKTiming, timeStamp.front(), timeDoubleNow - timeStamp.front() );
 					}

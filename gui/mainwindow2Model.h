@@ -8,6 +8,9 @@
 #ifndef GUI_H_
 #define GUI_H_
 
+
+#include "myGLWidget.h"
+
 #include <QMainWindow>
 #include <QTimer>
 #include "qcustomplot.h"
@@ -30,7 +33,6 @@
 #include <iostream>
 #include <QSplitter>
 #include <QPushButton>
-#include "myGLWidget.h"
 #include "SyncToolsIK.h"
 #include <QTextEdit>
 
@@ -39,7 +41,7 @@
 #undef timer
 #include <boost/timer/timer.hpp>
 
-using namespace gl;
+using namespace glRT;
 namespace Ui
 {
 	class MainWindow;
