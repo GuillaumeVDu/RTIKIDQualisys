@@ -202,7 +202,7 @@ bool QualisysClient::receiveData()
 								postition[0] = forcePacket.fApplicationPointX;
 								postition[1] = forcePacket.fApplicationPointY;
 								postition[2] = forcePacket.fApplicationPointZ;
-								if(_initFilter)
+								if(_initFilter) //We should maybe add a test to compare the number of force plate from XML and the one from Qualisys
 									_motionCapturePreProcessing->ComputeForcePlate ( i, force, torque, postition );
 							}
 						}

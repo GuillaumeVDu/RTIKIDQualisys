@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 
 
 
-    string serverAddress = "10.76.115.143"; //"tracking1";		// The address of the computer connected to the Qualisys motion tracking system (ex: "130.75.144.179")
+    string serverAddress = "localhost"; //"tracking1";		// The address of the computer connected to the Qualisys motion tracking system (ex: "130.75.144.179")
     int basePort = 22222; 					// The base port (as entered in QTM, TCP/IP port number, in the RT output tab of the workspace options
 
     // Defining global variables
@@ -67,9 +67,11 @@ int main(int argc, char* argv[]) {
         pRTPacket = poRTProtocol.GetRTPacket();
         frameNumber  = pRTPacket->GetFrameNumber();
 
+		std::cout << frameNumber << std::endl;
         poRTProtocol.GetCurrentFrame(CRTProtocol::cComponentForce);
 
         if (poRTProtocol.ReceiveRTPacket(eType, true)) {
+
             switch (eType) {
                 // Case 1 - sHeader.nType 0 indicates an error
                 case CRTPacket::PacketError :
@@ -84,6 +86,7 @@ int main(int argc, char* argv[]) {
                 // Case 2 - Data received
                 case CRTPacket::PacketData:
                     markerCount  = pRTPacket->GetForcePlateCount();
+					std::cout << markerCount << std::endl;
 
                     if (markerCount <= 0) {
                         cout << "No Plate Found" << endl;
@@ -118,7 +121,7 @@ int main(int argc, char* argv[]) {
             }
 
         }
-
+		
         poRTProtocol.GetCurrentFrame(CRTProtocol::cComponent3d);
 
 		if (poRTProtocol.ReceiveRTPacket(eType, true)) {

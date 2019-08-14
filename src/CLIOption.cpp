@@ -33,12 +33,12 @@ _record(false), _recordFilePath("output"), _time(false)
 {
 	boost::program_options::options_description desc ( "Options" );
 	desc.add_options()
-	( "help,h,H", "Output a small usage guide and exit successfully. No other output is generated." )
-	( "executionIK,i,I", boost::program_options::value<std::string> ( &_xmlIKFilePath ), "XML file for the inverse kinematic. The format can be found in the XSD directory." )
-	( "executionEMG,e,E", boost::program_options::value<std::string> ( &_xmlEMGFilePath ), "XML file for the EMG processing. The format can be found in the XSD directory." )
-	( "subject,s,S", boost::program_options::value<std::string> ( &_xmlSubjectFilePath ), "XML file for the subject specific model. The format can be found in the XSD directory." )
-	( "record,r,R", boost::program_options::value<std::string> ( &_recordFilePath ), "Save the output in a directory. The name of the directory is arg (string)." )
-	( "printTime,p,P", "Print the time between two frames." );
+	( "help,h", "Output a small usage guide and exit successfully. No other output is generated." )
+	( "executionIK,i", boost::program_options::value<std::string> ( &_xmlIKFilePath ), "XML file for the inverse kinematic. The format can be found in the XSD directory." )
+	//( "executionEMG,e", boost::program_options::value<std::string> ( &_xmlEMGFilePath ), "XML file for the EMG processing. The format can be found in the XSD directory." )
+	//( "subject,s", boost::program_options::value<std::string> ( &_xmlSubjectFilePath ), "XML file for the subject specific model. The format can be found in the XSD directory." )
+	( "record,r", boost::program_options::value<std::string> ( &_recordFilePath ), "Save the output in a directory. The name of the directory is arg (string)." )
+	( "printTime,p", "Print the time between two frames." );
 	boost::program_options::variables_map vm;
 	boost::program_options::store ( boost::program_options::parse_command_line ( argc, argv, desc ), vm );
 	boost::program_options::notify ( vm );
