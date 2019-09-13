@@ -98,7 +98,7 @@ void threadFunc(std::string executionIKFileName)
 {
 	std::cout << "\033[1;31mthread: " << "\033[0m" << std::endl;
 	IKAndIDComputation comp ( executionIKFileName );
-	
+	_verbose = 3;
 	
 	comp.setDirectory(_outDirectory);
 	comp.setRecord(_record);
@@ -138,6 +138,9 @@ void threadFunc(std::string executionIKFileName)
 		SyncToolsIK::Shared::timeTorque.insert(SyncToolsIK::Shared::timeTorque.end(), tempTime.begin(), tempTime.end());
 		SyncToolsIK::Shared::newMultTorqueData = true;
 		SyncToolsIK::Shared::MultTorqueMutex.unlock();
+
+		//if (tempTime.size() > 0 && tempVect.size() > 0)
+		//	std::cout << "tempTime: " << tempTime.at(0) << " : IK: " << tempVect.at(0).at(0) << std::endl;
 
 		boost::this_thread::sleep ( boost::posix_time::milliseconds ( 30 ) ); // 33 Hz
 

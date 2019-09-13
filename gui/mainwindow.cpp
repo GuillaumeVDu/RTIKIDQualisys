@@ -115,7 +115,7 @@ MainWindow::MainWindow ( double dt, std::vector<std::string> dofNames, const std
 //	_openglWin->ComputeRandPositionForModel2();
 
 	connect ( &_dataTimer, SIGNAL ( timeout() ), this, SLOT ( _thread() ) );
-	_dataTimer.start ( 50 ); // 30Hz
+	_dataTimer.start ( 20 ); //50 ms - 30Hz
 }
 
 MainWindow::~MainWindow()
