@@ -197,7 +197,8 @@ protected:
 	inline void rotateForcePlateFrames(const SimTK::fVec3& vect, SimTK::fVec3& result, int index)
 	{
 		result = forcePlateRotation_.at(index) * vect;
- 		result[0] = -result[0];
+		result[0] = -result[0];
+		result[2] = -result[2]; 
 	}
 	
 	inline void rotateForcePlateThenQualysisFrames(const SimTK::fVec3& vect, SimTK::fVec3& result, int index)
