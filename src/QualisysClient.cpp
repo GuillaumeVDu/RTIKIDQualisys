@@ -166,6 +166,7 @@ bool QualisysClient::receiveData()
 					exit ( 0 );
 					break;
 
+					
 					// Process if we received force plate data
 				case CRTPacket::PacketData:
 					forcePlateCount_ = pRTPacket_->GetForcePlateCount();

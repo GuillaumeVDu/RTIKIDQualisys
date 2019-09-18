@@ -15,6 +15,9 @@ SET(QT5_HOME "C:/Qt/Qt5.10.0/5.10.0/msvc2013_64/") # Otherwise cannot find FindQ
 
 cmake_policy(SET CMP0020 NEW)
 
+SET(COMPILE_CEINMS_PLUGIN ON)
+
+
 
 SET(CMAKE_DEBUG_POSTFIX _d)
 
@@ -26,7 +29,7 @@ ELSE()
 ENDIF()
 
 IF(NOT ENV{OPENSIM_HOME})
-	SET(OPENSIM_INSTALL_DIR C:/Users/vicon/Documents/OpenSim/OpenSim_install) # Path to  OpenSim
+	SET(OPENSIM_INSTALL_DIR "C:/Users/vzuser/Documents/OpenSimSourceCode-1513/OpenSim-install") # Path to  OpenSim
 ENDIF()
 
 #add_definitions(-DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
@@ -45,9 +48,21 @@ SET(OPENSIM_LIBS_DIR ${OPENSIM_INSTALL_DIR}/sdk/lib)
 SET(OPENSIM_DLLS_DIR ${OPENSIM_INSTALL_DIR}/bin)
 SET(SIMTK_HEADERS_DIR ${OPENSIM_INSTALL_DIR}/sdk/include/SimTK/include/)
 
+IF(COMPILE_CEINMS_PLUGIN)
+	SET(CEINMS_DIR "C:/Users/vzuser/Documents/CEINMS-RT/CEINMS/")
+	INCLUDE_DIRECTORIES(
+		${CMAKE_SOURCE_DIR}/../../lib/Producers
+		${CMAKE_SOURCE_DIR}/../../lib/Producers/FromExtDevice
+		${CMAKE_SOURCE_DIR}/../../lib/Producers/FromFile
+		${CMAKE_SOURCE_DIR}/../../lib/Producers/DevicePlugin
+		${CMAKE_SOURCE_DIR}/../../lib/xmlInput
+		${CMAKE_SOURCE_DIR}/../../lib/Producers/DevicePlugin/PluginHeritanceTemplate
+	)
+ENDIF()
+
 IF(WIN32)
-	SET(GLEW_HOME_DLL "C:/Users/vicon/Documents/OpenSim/glew-2.1.0/lib/Release/x64")
-	SET(GLEW_HOME "C:/Users/vicon/Documents/OpenSim/glew-2.1.0/")
+	SET(GLEW_HOME_DLL "C:/Users/vzuser/Documents/CEINMS-RT/glew-2.1.0-win32/glew-2.1.0/lib/Release/x64")
+	SET(GLEW_HOME "C:/Users/vzuser/Documents/CEINMS-RT/glew-2.1.0-win32/glew-2.1.0/")
 	INCLUDE_DIRECTORIES(
 		${GLEW_HOME}/include
 	)
@@ -58,8 +73,8 @@ IF(WIN32)
 	
 	SET(GLEW_LIB glew32.dll)
 	
-	SET(GLUT_HOME_DLL "C:/Users/vicon/Documents/OpenSim/freeglut/lib/x64")
-	SET(GLUT_HOME "C:/Users/vicon/Documents/OpenSim/freeglut")
+	SET(GLUT_HOME_DLL "C:/Users/vzuser/Documents/OpenSimSourceCode-1513/freeglut/lib/x64")
+	SET(GLUT_HOME "C:/Users/vzuser/Documents/OpenSimSourceCode-1513/freeglut")
 	INCLUDE_DIRECTORIES	(
 		${GLUT_HOME}/include
 	)

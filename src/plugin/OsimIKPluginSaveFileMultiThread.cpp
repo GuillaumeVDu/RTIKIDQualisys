@@ -133,16 +133,22 @@ const map<string, double>& OsimIKPlugin::GetDataMapTorque()
 
 	for ( VecStrCI it = _dofNameVect.begin(); it < _dofNameVect.end(); it++ )
 	{
-		try
+		//try
+		//{
+		if (_pastTorqueData.size() != 0)
 		{
-			double data = _pastTorqueData.at(std::distance<VecStrCI> ( _dofNameVect.begin(), it ));
-			_torque[_translate->OpenSimToCEINMS ( *it )] = data;
+			double data = _pastTorqueData.at(std::distance<VecStrCI>(_dofNameVect.begin(), it));
+			//_torque[_translate->OpenSimToCEINMS ( *it )] = data;
+			_torque[*it] = data;
 		}
-		catch ( const std::out_of_range& oor )
-		{
-			COUT << *it << std::endl;
-			continue;
-		}
+		else
+			_torque[*it] = 0;
+		//}
+		//catch ( const std::out_of_range& oor )
+		//{
+		//	COUT << *it << std::endl;
+		//	continue;
+		//}
 	}
 
 	return _torque;
@@ -150,12 +156,22 @@ const map<string, double>& OsimIKPlugin::GetDataMapTorque()
 
 // For the run-time loading of the library
 
-extern "C" ProducersPluginVirtual* create()
-{
+#ifdef UNIX
+extern "C" ProducersPluginVirtual* create() {
 	return new OsimIKPlugin;
 }
 
-extern "C" void destroy ( ProducersPluginVirtual* p )
-{
+extern "C" void destroy(ProducersPluginVirtual* p) {
 	delete p;
 }
+#endif
+
+#ifdef WIN32 // __declspec (dllexport) id important for dynamic loading
+extern "C" __declspec (dllexport) ProducersPluginVirtual* __cdecl create() {
+	return new OsimIKPlugin;
+}
+
+extern "C" __declspec (dllexport) void __cdecl destroy(ProducersPluginVirtual* p) {
+	delete p;
+}
+#endif

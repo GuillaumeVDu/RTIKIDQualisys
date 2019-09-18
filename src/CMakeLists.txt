@@ -146,3 +146,19 @@ TARGET_LINK_LIBRARIES(TestProgMarkerThreadV2
 	FileIO
 	opengl_util
 )
+
+IF(COMPILE_CEINMS_PLUGIN)
+	ADD_LIBRARY( OsimIKPluginSaveFileMultiThread SHARED plugin/OsimIKPluginSaveFileMultiThread.cpp
+		${CMAKE_SOURCE_DIR}/../../lib/xmlInput/execution.cxx
+		${CMAKE_SOURCE_DIR}/../../lib/Producers/DevicePlugin/TranslateOpenSimCEINMS.cpp
+	)
+
+
+	TARGET_LINK_LIBRARIES( OsimIKPluginSaveFileMultiThread
+		SharedThread
+		InvIkIdThreadV2
+		Gui
+		FileIO
+		opengl_util
+	)
+ENDIF()

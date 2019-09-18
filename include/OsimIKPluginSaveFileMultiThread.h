@@ -33,7 +33,6 @@
 #include "TranslateOpenSimCEINMS.h"
 #include <ctime>
 #include <Filter.h>
-#include <sys/time.h>
 #include <iostream>
 #include <fstream>
 #include <boost/thread.hpp>
@@ -47,8 +46,13 @@
  * Plugin for CEINMS-RT for real-time use of the IK using Qualisys markers
  */
 
-class OsimIKPlugin: public ProducersPluginVirtual
-{
+#ifdef WIN32
+class __declspec(dllexport) OsimIKPlugin : public ProducersPluginVirtual {
+#endif
+#ifdef UNIX
+	class  OsimIKPlugin : public ProducersPluginVirtual {
+#endif
+
 	public:
 		/**
 		 * Constructor
@@ -74,6 +78,7 @@ class OsimIKPlugin: public ProducersPluginVirtual
 
 		const double& getTime()
 		{
+			//std::cout << _timeCurrent << std::endl << std::flush;
 			return _timeCurrent;
 		}
 		
