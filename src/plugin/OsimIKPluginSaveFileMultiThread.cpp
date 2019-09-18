@@ -83,6 +83,8 @@ void OsimIKPlugin::init ( string xmlName, string executionName )
 	for ( std::vector<std::string>::const_iterator it = _dofNameVect.begin(); it < _dofNameVect.end(); it++ )
 		_pastAngleData.push_back ( 0 );
 
+	std::cout << "A" << std::endl;
+
 	_ikIDcomp->start();
 	
 }

@@ -86,6 +86,7 @@ IKAndIDComputation::IKAndIDComputation ( const string& executionIKFileName ) :
 		_framesNumbersInWorkerID.push_back ( 0 );
 		_framesNumbersInWorkerKalman.push_back ( 0 );
 		_threadWorker.push_back ( new boost::thread ( boost::bind ( &IKAndIDComputation::worker, this , i ) ) );
+		std::cout << "test" << std::endl;
 	}
 
 	_supervisor = new boost::thread ( boost::bind ( &IKAndIDComputation::supervisor, this ) );

@@ -73,7 +73,8 @@ IKAndIDComputation::IKAndIDComputation ( const string& executionIKFileName ) :
 	_idResultWorker.resize ( _numberOfThread );
 	_idTimeStamp.resize ( _numberOfThread );
 
-	_barrier = new boost::barrier ( _numberOfThread + 2 );
+	//_barrier = new boost::barrier ( 2 );
+	_barrier = new boost::barrier(_numberOfThread + 2);
 
 	_verbose = 1;
 	_record = false;
@@ -124,7 +125,7 @@ void IKAndIDComputation::start()
 	{
 		_logger = new OpenSimFileLogger<int>(_outDirectory);
 		
-		std::vector<std::string> forcePlateCol;
+		std::vector<std::string> forcePlateCol; // if more than two force plate logger is not going to like it.
 		forcePlateCol.push_back("ground_force_vx");
 		forcePlateCol.push_back("ground_force_vy");
 		forcePlateCol.push_back("ground_force_vz");
@@ -151,7 +152,7 @@ void IKAndIDComputation::start()
 		_logger->addLog(Logger::Marker, _xmlInterpreter->getMarkersNames());
 		_logger->addLog(Logger::MarkerFilter, _xmlInterpreter->getMarkersNames());
 	}
-
+	std::cout << "test" << std::endl << std::flush;
 	for ( int i = 0; i < _numberOfThread; i++ )
 	{
 		_condWorkIKToDo.push_back ( new boost::condition_variable() );
@@ -162,6 +163,7 @@ void IKAndIDComputation::start()
 		_framesNumbersInWorkerID.push_back ( 0 );
 		_framesNumbersInWorkerKalman.push_back ( 0 );
 		_threadWorker.push_back ( new boost::thread ( boost::bind ( &IKAndIDComputation::worker, this , i ) ) );
+		std::cout << "Worker!" << std::endl << std::flush;
 	}
 
 	_supervisor = new boost::thread ( boost::bind ( &IKAndIDComputation::supervisor, this ) );
@@ -381,6 +383,8 @@ void IKAndIDComputation::worker ( unsigned int rank )
 	SimTK::Array_<SimTK::fVec3> markerData;
 	unsigned long currentFramesNumber;
 	bool firstPass = true;
+
+	std::cout << "Worker!" << std::endl << std::flush;
 
 	_barrier->wait();
 
