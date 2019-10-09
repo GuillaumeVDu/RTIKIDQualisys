@@ -230,6 +230,31 @@ class QualisysClient
 			_motionCapturePreProcessing->InitGRFFilter(aCoeff, bCoeff, initValue);
 		}
 
+		inline void set_last_marker(SimTK::fVec3& marker, int index)
+		{
+			last_markerSet.insert(last_markerSet.begin() + index, marker);
+			
+		}
+
+		inline SimTK::fVec3 get_last_marker(int index)
+		{
+			SimTK::fVec3 marker;
+			marker[0] = last_markerSet.at(index)[0];
+			marker[1] = last_markerSet.at(index)[1];
+			marker[2] = last_markerSet.at(index)[2];
+			return marker;
+		}
+
+		inline double get_weight(int index)
+		{
+			return markers_weight.at(index);
+		}
+
+		inline void set_weights(std::vector<double>& weights)
+		{
+			markers_weight = weights;
+		}
+
 	protected:
 		SimTK::Array_<SimTK::fVec3> markerPos_; //!< SimTK array of vector containing the position (x, y, z) of the markers.
 		SimTK::Array_<SimTK::fVec3> _markerPosRotate; //!< SimTK array of vector containing the position (x, y, z) of the markers from the frames N-1.
@@ -249,6 +274,9 @@ class QualisysClient
 		bool _initFilter;
 		int _verbose;
 		std::vector<std::string> _markerNames;
+
+		std::vector<SimTK::fVec3> last_markerSet; //----------------------------- NaN Value
+		std::vector<double> markers_weight;
 };
 
 #endif /* QUALISYSCLIENT_H_ */

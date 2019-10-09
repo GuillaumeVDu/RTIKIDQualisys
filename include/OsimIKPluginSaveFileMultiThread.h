@@ -78,7 +78,7 @@ class __declspec(dllexport) OsimIKPlugin : public ProducersPluginVirtual {
 
 		const double& getTime()
 		{
-			//std::cout << _timeCurrent << std::endl << std::flush;
+			//std::cout << std::setprecision(15) << _timeCurrent << std::endl << std::flush;
 			return _timeCurrent;
 		}
 		

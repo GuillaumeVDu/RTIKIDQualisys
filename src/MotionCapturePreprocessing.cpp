@@ -231,59 +231,66 @@ void MotionCapturePreprocessing::ComputeMarker ( SimTK::Array_<SimTK::fVec3>& ma
 	}
 }
 
-void MotionCapturePreprocessing::ComputeForcePlate ( int index, const SimTK::fVec3& force,
-		const SimTK::fVec3& torque, const SimTK::fVec3& position )
+void MotionCapturePreprocessing::ComputeForcePlate(int index, const SimTK::fVec3& force,
+	const SimTK::fVec3& torque, const SimTK::fVec3& position)
 {
 
-	rotateForcePlateFrames ( force, _forces.at ( index ), index );
-	rotateForcePlateFrames ( torque, _torques.at ( index ), index );
-	rotateForcePlateFrames ( position, _cof.at ( index ), index );
-// 	_forces.at ( index ) = force;
-// 	_torques.at ( index ) = torque;
-// 	_cof.at ( index ) = position;
-	_cof.at ( index ) = _cof.at ( index ) / 1000;
+	/*rotateForcePlateFrames(force, _forces.at(index), index);
+	rotateForcePlateFrames(torque, _torques.at(index), index);
+	rotateForcePlateFrames(position, _cof.at(index), index);*/
+	// 	_forces.at ( index ) = force;
+	// 	_torques.at ( index ) = torque;
+	// 	_cof.at ( index ) = position;
+	_cof.at(index) = _cof.at(index) / 1000;
+	_cof.at(index)[0] = -_cof.at(index)[0]; // --------------------------as MoToNMS----------------------------------
 
-	std::vector<fFilter*> filterTemp = _grffFilter.at ( index );
+	std::vector<fFilter*> filterTemp = _grffFilter.at(index);
 
 	char cpt = 0;
 
-	for ( int i = 0; i < 3; i++ )
+	for (int i = 0; i < 3; i++)
 	{
-		_forcesFilter.at ( index ) [i] = filterTemp.at ( cpt )->filter ( force[i] );
-// 		_forcesFilter.at ( index ) [i] = force[i] ;
+		_forcesFilter.at(index)[i] = filterTemp.at(cpt)->filter(force[i]);
+		// 		_forcesFilter.at ( index ) [i] = force[i] ;
 		cpt++;
 	}
 
 	SimTK::fVec3 torquesFiltered;
 
-	for ( int i = 0; i < 3; i++ )
+	for (int i = 0; i < 3; i++)
 	{
-		torquesFiltered[i] = filterTemp.at ( cpt )->filter ( torque[i] );
-// 		torquesFiltered[i] =  torque[i];
+		torquesFiltered[i] = filterTemp.at(cpt)->filter(torque[i]);
+		// 		torquesFiltered[i] =  torque[i];
 		cpt++;
 	}
 
-	_cofFilter.at ( index ).setToZero();
-	_torquesFilter.at ( index ).setToZero();
+	_cofFilter.at(index).setToZero();
+	_torquesFilter.at(index).setToZero();
 
-	if ( _forcesFilter.at ( index ) [2] > 5 )
+	if (_forcesFilter.at(index)[2] > 5)
 	{
+		
 		// COPx = (-(My + (Z0 - padding).Fx)/Fz)
-		_cofFilter.at ( index ) [0] = ( - ( torquesFiltered[1] + ( forcePlateOrigin_.at ( index ) [2]/ 1000  ) * _forcesFilter.at ( index ) [0] ) / _forcesFilter.at ( index ) [2] );
+		_cofFilter.at(index)[0] = (-(torquesFiltered[1] + (forcePlateOrigin_.at(index)[2] / 1000) * _forcesFilter.at(index)[0]) / _forcesFilter.at(index)[2]);
 
 		// COPy = ((Mx - (Z0 - padding).Fy)/Fz)
-		_cofFilter.at ( index ) [1] = ( ( torquesFiltered[0] - ( forcePlateOrigin_.at ( index ) [2]/ 1000  ) * _forcesFilter.at ( index ) [1] ) / _forcesFilter.at ( index ) [2] );
+		_cofFilter.at(index)[1] = ((torquesFiltered[0] - (forcePlateOrigin_.at(index)[2] / 1000) * (_forcesFilter.at(index)[1])) / _forcesFilter.at(index)[2]);
 
-// 		_cofFilter.at ( index ) = - _cofFilter.at ( index );
-		
+		// 		_cofFilter.at ( index ) = - _cofFilter.at ( index );
+
+		//-----------------------------------------------------------------------------
+		// the Force_y (_forcesFilter.at ( index ) [1]) is inverted to make the torque coincide with the one in MoToNMS
+		//-----------------------------------------------------------------------------
+
 		// Tz = Mz - (( COPx ) * Fy) + (( COPy ) * Fx)
-		_torquesFilter.at ( index ) [2] = torquesFiltered[2] - ( ( _cofFilter.at ( index ) [0] ) * _forcesFilter.at ( index ) [1] )
+		_torquesFilter.at ( index ) [2] = torquesFiltered[2] - ( ( _cofFilter.at ( index ) [0] ) *  (- _forcesFilter.at ( index ) [1]) )
 				+ ( ( _cofFilter.at ( index ) [1] ) * _forcesFilter.at ( index ) [0] );
 
 // 		_torquesFilter.at ( index ) [2] = _torquesFilter.at ( index ) [2] / 1000;
 		_cofFilter.at ( index ) = - _cofFilter.at ( index );
 		rotateForcePlateFrames ( _cofFilter.at ( index ), _cofFilter.at ( index ), index );
 
+		_cofFilter.at(index)[1] = 0.0; //the COP_Y has to be zero
 				
 		if ( forcePlateTypes_.at ( index ) == 3 )
 		{

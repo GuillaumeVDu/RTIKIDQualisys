@@ -86,12 +86,15 @@ void OsimIKPlugin::init ( string xmlName, string executionName )
 	std::cout << "A" << std::endl;
 
 	_ikIDcomp->start();
+
+	Sleep(10000);
 	
 }
 
 const map<string, double>& OsimIKPlugin::GetDataMap()
 {
 	timeval tv;
+	//std::cout << "ok0" << std::endl;
 
 	// Get the data from the boost thread
 	std::vector<std::vector<double> > angleData;
@@ -122,12 +125,16 @@ const map<string, double>& OsimIKPlugin::GetDataMap()
 			continue;
 		}
 	}
+
+	//std::cout << "ok" << std::endl;
 	
 	return _mapAngleDataToDofName;
 }
 
 const map<string, double>& OsimIKPlugin::GetDataMapTorque()
 {
+
+	//std::cout << "t0" << std::endl;
 	std::vector<std::vector<double> > TorqueData = _ikIDcomp->getIDData();
 
 	if ( TorqueData.size() != 0 )
@@ -152,7 +159,7 @@ const map<string, double>& OsimIKPlugin::GetDataMapTorque()
 		//	continue;
 		//}
 	}
-
+	//std::cout << "t1" << std::endl;
 	return _torque;
 }
 

@@ -61,8 +61,8 @@ IF(COMPILE_CEINMS_PLUGIN)
 ENDIF()
 
 IF(WIN32)
-	SET(GLEW_HOME_DLL "C:/Users/vzuser/Documents/CEINMS-RT/glew-2.1.0-win32/glew-2.1.0/lib/Release/x64")
-	SET(GLEW_HOME "C:/Users/vzuser/Documents/CEINMS-RT/glew-2.1.0-win32/glew-2.1.0/")
+	SET(GLEW_HOME_DLL "C:/Users/vzuser/Documents/glew-2.1.0-win32/glew-2.1.0/lib/Release/x64")
+	SET(GLEW_HOME "C:/Users/vzuser/Documents/glew-2.1.0-win32/glew-2.1.0/")
 	INCLUDE_DIRECTORIES(
 		${GLEW_HOME}/include
 	)

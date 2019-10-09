@@ -50,9 +50,6 @@ void QualisysClient::init ( const string& labXml )
 	_motionCapturePreProcessing->setNumberOfMarker(_markerNames.size());
 	_motionCapturePreProcessing->readXML();
 
-	COUT << "Connecting to the Qualisys Motion Tracking system specified at: " << serverAddress_ << ":" << basePort_
-			<< endl;
-
 	// Connect to the Qualisys software
 	if ( !poRTProtocol_.Connect ( ( char* ) serverAddress_.data(), basePort_, 0, 1, 7 ) )
 	{
@@ -60,6 +57,9 @@ void QualisysClient::init ( const string& labXml )
 		exit ( 1 );
 	}
 
+
+	COUT << "Connecting to the Qualisys Motion Tracking system specified at: " << serverAddress_ << ":" << basePort_
+		<< endl;
 	firstPass_ = true;
 
 }
@@ -119,9 +119,13 @@ bool QualisysClient::receiveData()
 
 						// If the data is no good exit
 						if ( _verbose > 1 )
-							if ( isnan ( marker[0] ) || isnan ( marker[1] ) || isnan ( marker[2] ) )
+							if (get_weight(i) == 1 && ( isnan(marker[0]) || isnan(marker[1]) || isnan(marker[2]))){
 								COUT << "Marker " << _markerNames.at ( i ) << " not detected." << std::endl;
-							
+								marker = get_last_marker(i);
+							}else
+							{
+								set_last_marker(marker, i);
+							}
 						// Change to meters
 						marker = marker / 1000;
 							
@@ -192,8 +196,16 @@ bool QualisysClient::receiveData()
 							// Get the force plate data for the plate i
 							for ( int j = 0; j < forceCount_; j++ )
 							{
+								
 								CRTPacket::SForce forcePacket;
 								pRTPacket_->GetForceData ( i, 0, forcePacket );
+
+								//char* pPacket = 
+								/*if (j == forceCount_ - 1) {
+									std::cout << "TimeStamp:  " << pRTPacket_->GetTimeStamp() << std::endl << std::flush;
+									std::cout << "frame Number:  " << pRTPacket_->GetFrameNumber() << std::endl << std::flush;
+									std::cout << "---------------end of the Force Packet ----------------" << std::endl << std::flush;
+								}*/
 								force[0] = forcePacket.fForceX;
 								force[1] = forcePacket.fForceY;
 								force[2] = forcePacket.fForceZ;

@@ -163,7 +163,7 @@ void IKAndIDComputation::start()
 		_framesNumbersInWorkerID.push_back ( 0 );
 		_framesNumbersInWorkerKalman.push_back ( 0 );
 		_threadWorker.push_back ( new boost::thread ( boost::bind ( &IKAndIDComputation::worker, this , i ) ) );
-		std::cout << "Worker!" << std::endl << std::flush;
+		//std::cout << "Worker!" << std::endl << std::flush;
 	}
 
 	_supervisor = new boost::thread ( boost::bind ( &IKAndIDComputation::supervisor, this ) );
@@ -183,6 +183,10 @@ void IKAndIDComputation::provider()
 	_mutexInit.lock();
 	QualisysClient client ( _xmlInterpreter->getIP(), _xmlInterpreter->getPort() );
 
+	//give ti the client idea of the markers weight
+	std::vector<double> markers_weight = _xmlInterpreter->getMarkersWeights();
+	client.set_weights(markers_weight);
+
 	client.setMarkerNames ( _xmlInterpreter->getMarkersNames() );
 	client.setVerbose ( _verbose );
 
@@ -198,10 +202,13 @@ void IKAndIDComputation::provider()
 
 	double timePast = getTime();
 
+
 	while ( true )
 	{
 //  		boost::timer::auto_cpu_timer auto_t3;
 		// Check if we have to stop the thread.
+
+
 		_mutexEnd.lock();
 
 		if ( _end )
@@ -384,10 +391,10 @@ void IKAndIDComputation::worker ( unsigned int rank )
 	unsigned long currentFramesNumber;
 	bool firstPass = true;
 
-	std::cout << "Worker!" << std::endl << std::flush;
+
+	//std::cout << "Worker!" << std::endl;
 
 	_barrier->wait();
-
 	while ( true )
 	{
 		// Check if we have to stop the thread.
@@ -401,6 +408,7 @@ void IKAndIDComputation::worker ( unsigned int rank )
 
 		_mutexEnd.unlock();
 
+
 		// Check if have new data from the providers.
 		{
 			boost::mutex::scoped_lock lock ( _mutexWorkerForBool );
@@ -409,6 +417,7 @@ void IKAndIDComputation::worker ( unsigned int rank )
 			while ( ! ( !_workerFree[rank] && !_workerIKDone[rank] ) ) _condWorkIKToDo[rank]->wait ( lock );
 		}
 
+		//std::cout << "1!" << std::endl;
 		_mutexWorkerForSetData.lock();
 
 		// Get the data from the supervisor.
@@ -633,10 +642,12 @@ void IKAndIDComputation::supervisor()
 			workerIKDone = _workerIKDone;
 			_mutexWorkerForBool.unlock();
 
+
 			for ( std::vector<bool>::const_iterator itWorkerIKDone = workerIKDone.begin(); itWorkerIKDone < workerIKDone.end(); itWorkerIKDone++ )
 			{
 				if ( *itWorkerIKDone )
 				{
+
 					const int& cpt = std::distance<std::vector<bool>::const_iterator> ( workerIKDone.begin(), itWorkerIKDone );
 					std::vector<unsigned long> framesNumbersInWorkerKalman;
 
