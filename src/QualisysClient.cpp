@@ -50,6 +50,9 @@ void QualisysClient::init ( const string& labXml )
 	_motionCapturePreProcessing->setNumberOfMarker(_markerNames.size());
 	_motionCapturePreProcessing->readXML();
 
+	COUT << "Connecting to the Qualisys Motion Tracking system specified at: " << serverAddress_ << ":" << basePort_
+			<< endl;
+
 	// Connect to the Qualisys software
 	if ( !poRTProtocol_.Connect ( ( char* ) serverAddress_.data(), basePort_, 0, 1, 7 ) )
 	{
@@ -57,9 +60,6 @@ void QualisysClient::init ( const string& labXml )
 		exit ( 1 );
 	}
 
-
-	COUT << "Connecting to the Qualisys Motion Tracking system specified at: " << serverAddress_ << ":" << basePort_
-		<< endl;
 	firstPass_ = true;
 
 }
@@ -173,6 +173,8 @@ bool QualisysClient::receiveData()
 					
 					// Process if we received force plate data
 				case CRTPacket::PacketData:
+
+
 					forcePlateCount_ = pRTPacket_->GetForcePlateCount();
 
 					// If we don't have force plate in the system
@@ -184,15 +186,14 @@ bool QualisysClient::receiveData()
 					else
 					{
 // 						_motionCapturePreProcessing->resetGRF();
+						_motionCapturePreProcessing->resetGRFFiltVect();
+						_motionCapturePreProcessing->resetGRFUnFiltVect();
+						
 						for ( int i = 0; i < forcePlateCount_; i++ )
 						{
 							// Get the numbers of force received
 							forceCount_ = pRTPacket_->GetForceCount ( i );
 							
-// 							COUT << "forceCount_: " << forceCount_ << std::endl << std::flush;
-// 							COUT << "GetForceSinglePlateCount: " << pRTPacket_->GetForceSinglePlateCount() << std::endl << std::flush;
-							
-
 							// Get the force plate data for the plate i
 							for ( int j = 0; j < forceCount_; j++ )
 							{
@@ -200,12 +201,6 @@ bool QualisysClient::receiveData()
 								CRTPacket::SForce forcePacket;
 								pRTPacket_->GetForceData ( i, 0, forcePacket );
 
-								//char* pPacket = 
-								/*if (j == forceCount_ - 1) {
-									std::cout << "TimeStamp:  " << pRTPacket_->GetTimeStamp() << std::endl << std::flush;
-									std::cout << "frame Number:  " << pRTPacket_->GetFrameNumber() << std::endl << std::flush;
-									std::cout << "---------------end of the Force Packet ----------------" << std::endl << std::flush;
-								}*/
 								force[0] = forcePacket.fForceX;
 								force[1] = forcePacket.fForceY;
 								force[2] = forcePacket.fForceZ;
