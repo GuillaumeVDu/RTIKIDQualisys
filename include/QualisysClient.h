@@ -217,6 +217,12 @@ class QualisysClient
 		inline void setMarkerNames ( const std::vector<std::string>& markerNames )
 		{
 			_markerNames = markerNames;
+			last_markerSet.resize(_markerNames.size());
+			for (int i = 0; i < _markerNames.size(); i++)
+			{
+				last_markerSet.at(i).setToZero();
+			}
+
 		}
 		
 		inline void InitMarkerFilter(const std::vector<float>& aCoeff, const std::vector<float>& bCoeff, const std::vector<std::vector<std::vector<float> > >& initValue)
@@ -232,7 +238,9 @@ class QualisysClient
 
 		inline void set_last_marker(SimTK::fVec3& marker, int index)
 		{
-			last_markerSet.insert(last_markerSet.begin() + index, marker);
+			last_markerSet.at(index)[0] = marker[0];
+			last_markerSet.at(index)[1] = marker[1];
+			last_markerSet.at(index)[2] = marker[2];
 			
 		}
 
@@ -275,7 +283,7 @@ class QualisysClient
 		int _verbose;
 		std::vector<std::string> _markerNames;
 
-		std::vector<SimTK::fVec3> last_markerSet; //----------------------------- NaN Value
+		std::vector<SimTK::fVec3>last_markerSet; //----------------------------- NaN Value
 		std::vector<double> markers_weight;
 };
 

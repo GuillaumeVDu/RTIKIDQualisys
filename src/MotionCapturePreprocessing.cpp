@@ -235,9 +235,9 @@ void MotionCapturePreprocessing::ComputeForcePlate(int index, const SimTK::fVec3
 	const SimTK::fVec3& torque, const SimTK::fVec3& position)
 {
 
-	/*rotateForcePlateFrames(force, _forces.at(index), index);
+	rotateForcePlateFrames(force, _forces.at(index), index);
 	rotateForcePlateFrames(torque, _torques.at(index), index);
-	rotateForcePlateFrames(position, _cof.at(index), index);*/
+	rotateForcePlateFrames(position, _cof.at(index), index);
 	// 	_forces.at ( index ) = force;
 	// 	_torques.at ( index ) = torque;
 	// 	_cof.at ( index ) = position;

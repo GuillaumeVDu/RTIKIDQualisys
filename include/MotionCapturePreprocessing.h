@@ -102,32 +102,32 @@ public:
 		return _torques;
 	}
 	
-	inline const std::vector<std::vector<SimTK::fVec3> >& getForcesFilteredVect()
+	inline const std::deque<std::vector<SimTK::fVec3> >& getForcesFilteredVect()
 	{
 		return _forcesFilterVect;
 	}
 	
-	inline const std::vector<std::vector<SimTK::fVec3> >& getForcesUnFilteredVect()
+	inline const std::deque<std::vector<SimTK::fVec3> >& getForcesUnFilteredVect()
 	{
 		return _forcesVect;
 	}
 	
-	inline const std::vector<std::vector<SimTK::fVec3> >& getCOFFilteredVect()
+	inline const std::deque<std::vector<SimTK::fVec3> >& getCOFFilteredVect()
 	{
 		return _cofFilterVect;
 	}
 	
-	inline const std::vector<std::vector<SimTK::fVec3> >& getCOFUnFilteredVect()
+	inline const std::deque<std::vector<SimTK::fVec3> >& getCOFUnFilteredVect()
 	{
 		return _cofVect;
 	}
 	
-	inline const std::vector<std::vector<SimTK::fVec3> >& getTorquesFilteredVect()
+	inline const std::deque<std::vector<SimTK::fVec3> >& getTorquesFilteredVect()
 	{
 		return _torquesFilterVect;
 	}
 	
-	inline const std::vector<std::vector<SimTK::fVec3> >& getTorquesUnFilteredVect()
+	inline const std::deque<std::vector<SimTK::fVec3> >& getTorquesUnFilteredVect()
 	{
 		return _torquesVect;
 	}
@@ -178,12 +178,12 @@ protected:
 	std::vector<SimTK::fVec3> 				_cofFilter;
 	std::vector<SimTK::fVec3> 				_torquesFilter;
 	
-	std::vector<std::vector<SimTK::fVec3> >				_forcesVect;
-	std::vector<std::vector<SimTK::fVec3> >				_cofVect;
-	std::vector<std::vector<SimTK::fVec3> >				_torquesVect;
-	std::vector<std::vector<SimTK::fVec3> >				_forcesFilterVect;
-	std::vector<std::vector<SimTK::fVec3> >				_cofFilterVect;
-	std::vector<std::vector<SimTK::fVec3> >				_torquesFilterVect;
+	std::deque<std::vector<SimTK::fVec3> >				_forcesVect;
+	std::deque<std::vector<SimTK::fVec3> >				_cofVect;
+	std::deque<std::vector<SimTK::fVec3> >				_torquesVect;
+	std::deque<std::vector<SimTK::fVec3> >				_forcesFilterVect;
+	std::deque<std::vector<SimTK::fVec3> >				_cofFilterVect;
+	std::deque<std::vector<SimTK::fVec3> >				_torquesFilterVect;
 	unsigned int 							_nbOfMarker;
 	unsigned int 							nbOfForcePlate_; 			//!< Number of force plates
 	
