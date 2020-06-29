@@ -6,7 +6,42 @@
 
 #include <Simbody.h>
 #include <OpenSim/OpenSim.h>
-#include <SimTKCommon.h>
+
+
+
+#ifdef WIN32
+#include <windows.h>
+#include <GL/glew.h>
+//#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+#include <GL/glut.h>
+#endif
+
+/*/ /!\ Warning do not put
+#include <Simbody.h>
+#include <OpenSim/OpenSim.h>
+
+after
+#include <QtOpenGL/QtOpenGL>
+#include <QtOpenGL/QGLWidget> or other opensim simtk library
+
+#include <windows.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+#include <GL/glut.h>
+
+will not compile because of redinition but work fine on Linux (go figure !)
+
+*/
+
+#include <QtOpenGL/QtOpenGL>
+#include <QtOpenGL/QGLWidget>
+
+#include "Mesh.h"
+#include "RenderedMesh.h"
+
 
 
 #ifdef UNIX
@@ -21,40 +56,6 @@
 #include <glext.h>
 #include <Glut/glut.h>
 #endif
-#ifdef WIN32
-#include <windows.h>
-#include <GL/glew.h>
-//#include <GL/gl.h>
-#include <GL/glu.h>
-//#include <glext.h>
-#include <GL/glut.h>
-#endif
-
-/*/ /!\ Warning do not put 
-#include <Simbody.h>
-#include <OpenSim/OpenSim.h>
-
-after 
-#include <QtOpenGL/QtOpenGL>
-#include <QtOpenGL/QGLWidget> or other opensim simtk library
-
-#include <windows.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glext.h>
-#include <GL/glut.h>
-
-will not compile because of redinition but work fine on Linux (go figure !)
-
-*/
-
-#include "Mesh.h"
-#include "RenderedMesh.h"
-
-
-#include <QtOpenGL/QtOpenGL>
-#include <QtOpenGL/QGLWidget>
-
 
 #if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
 #undef qInfo
