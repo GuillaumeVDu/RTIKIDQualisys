@@ -40,6 +40,7 @@
 
 #include <thread>
 #include <mutex>
+#include <deque>
 
 namespace Logger
 {
